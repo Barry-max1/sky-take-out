@@ -8,6 +8,7 @@ public class AccountNotFoundException extends BaseException {
     public AccountNotFoundException() {
     }
 
+    //构造器
     public AccountNotFoundException(String msg) {
         super(msg);
     }

@@ -43,26 +43,30 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      */
     @Bean
     public Docket docket() {
-        ApiInfo apiInfo = new ApiInfoBuilder()
+        log.info("准备生成接口文档");
+        ApiInfo apiInfo = new ApiInfoBuilder()//构建生成的接口文档的一系列信息
                 .title("苍穹外卖项目接口文档")
                 .version("2.0")
                 .description("苍穹外卖项目接口文档")
                 .build();
+
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
                 .paths(PathSelectors.any())
-                .build();
+                .build();  //最后帮我们生成接口文档
         return docket;
     }
 
     /**
-     * 设置静态资源映射
+     * 设置静态资源映射，主要是访问接口文档（html,js,css）,这个方法实际上是重写了父类里面的方法，方法名不可以乱写
      * @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        log.info("开始设置静态资源映射");
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
+    }   //在生成接口文档之后，这些文件都会放在这些类路径下边，当我们发出请求的时候（"/doc.html"），就需要把它映射到
+        //真正的资源上边去，否则无法请求到页面
 }

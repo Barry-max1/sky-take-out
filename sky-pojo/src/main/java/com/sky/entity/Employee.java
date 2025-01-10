@@ -18,7 +18,7 @@ public class Employee implements Serializable {
 
     private Long id;
 
-    private String username;
+    private String username; //登录时的账号——>username——>admin
 
     private String name;
 

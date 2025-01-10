@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Result<T> implements Serializable {
 
     private Integer code; //编码：1成功，0和其它数字为失败
-    private String msg; //错误信息
+    private String msg; //错误信息或者是失败的提示信息，一般都会通过前端一个弹窗的方式将信息进行展示
     private T data; //数据
 
     public static <T> Result<T> success() {
@@ -21,7 +21,8 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    public static <T> Result<T> success(T object) {
+    public static <T> Result<T> success(T object)
+    {
         Result<T> result = new Result<T>();
         result.data = object;
         result.code = 1;
