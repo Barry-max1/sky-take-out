@@ -40,4 +40,6 @@ public class Category implements Serializable {
 
     //修改人
     private Long updateUser;
+
+
 }
