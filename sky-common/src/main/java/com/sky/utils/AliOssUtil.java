@@ -12,6 +12,9 @@ import java.io.ByteArrayInputStream;
 @Data
 @AllArgsConstructor
 @Slf4j
+
+//把图片文件上传到阿里云服务器的工具类
+
 public class AliOssUtil {
 
     private String endpoint;
@@ -53,6 +56,10 @@ public class AliOssUtil {
         }
 
         //文件访问路径规则 https://BucketName.Endpoint/ObjectName
+        /**
+         * 我们在最后主动拼接了一个字符串，就是当我们的图片文件上传完成之后，需要把
+         * 当前这个图片文件上传的绝对路径进行字符串的拼接，
+         */
         StringBuilder stringBuilder = new StringBuilder("https://");
         stringBuilder
                 .append(bucketName)
@@ -66,3 +73,21 @@ public class AliOssUtil {
         return stringBuilder.toString();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

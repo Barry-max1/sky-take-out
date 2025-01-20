@@ -56,7 +56,11 @@ public class AutoFillAspect
         }
         //不为null的情况
         Object entity = args[0];
-
+        /*
+        插一嘴，这里的实体对象有可能是Employee,Category,Dish或者是Setmeal，所以不能以单纯的某个
+        对象来接收args[0],只能用Object，然后运用反射来为公共字段赋值，如果知道是哪一个对象的话，就可以
+        用set方法赋值，但是会造成代码冗余度高
+         */
         //准备赋值的数据
         LocalDateTime now = LocalDateTime.now();
         Long currentId = BaseContext.getCurrentId();
