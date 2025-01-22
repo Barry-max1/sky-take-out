@@ -27,3 +27,20 @@ public class DishDTO implements Serializable {
     private List<DishFlavor> flavors = new ArrayList<>();
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
