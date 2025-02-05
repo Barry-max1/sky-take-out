@@ -69,7 +69,6 @@ public class EmployeeController {
 
     /**
      * 退出
-     *
      * @return
      */
     @ApiOperation(value = "员工退出功能")
