@@ -36,7 +36,8 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
     {
         //判断当前拦截到的是Controller方法还是其他资源（比如可能是请求的静态图片、样式文件等资源对应的处理器）
         if (!(handler instanceof HandlerMethod)) {
-            //当前拦截到的不是动态方法（Spring 中对应着控制器类里具体的方法（也就是处理业务逻辑的那些方法）），直接放行
+    //当前拦截到的不是动态方法（动态方法是指Spring 中对应着控制器类里具体的方法（也就是处理业务逻辑的那些方法）），
+    //直接放行
             return true;
         }
 

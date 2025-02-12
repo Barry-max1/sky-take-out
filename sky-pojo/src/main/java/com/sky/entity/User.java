@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    //用户的主键值
     private Long id;
 
     //微信用户唯一标识
