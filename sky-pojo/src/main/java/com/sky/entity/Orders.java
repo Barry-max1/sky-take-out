@@ -9,6 +9,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+
+/**
+ * 用户端历史订单模块：商家还没有接收的订单用户无法取消订单
+ *
+ * 商家端订单管理模块：待接单的订单商家拒单失败，待派送的订单商家无法取消订单
+ */
+
 /**
  * 订单
  */
@@ -43,7 +50,7 @@ public class Orders implements Serializable
     //订单号
     private String number;
 
-    //订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 7退款
+    //****订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 7退款
     private Integer status;
 
     //下单用户id
@@ -55,13 +62,13 @@ public class Orders implements Serializable
     //下单时间
     private LocalDateTime orderTime;
 
-    //结账时间
+    //****结账时间
     private LocalDateTime checkoutTime;
 
     //支付方式 1微信，2支付宝
     private Integer payMethod;
 
-    //支付状态 0未支付 1已支付 2退款
+    //****支付状态 0未支付 1已支付 2退款
     private Integer payStatus;
 
     //实收金额
