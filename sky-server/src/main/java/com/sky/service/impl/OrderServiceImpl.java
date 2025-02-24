@@ -5,6 +5,7 @@ package com.sky.service.impl;
  * @version 1.0
  */
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -23,6 +24,7 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,9 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -55,7 +59,8 @@ public class OrderServiceImpl implements OrderService {
     private WeChatPayUtil weChatPayUtil;
     @Autowired
     private UserMapper userMapper;
-
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     /**
      * 用户下单
@@ -150,6 +155,8 @@ public class OrderServiceImpl implements OrderService {
 //        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
 //            throw new OrderBusinessException("该订单已支付");
 //        }
+
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", "ORDERPAID");
         OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
@@ -168,6 +175,7 @@ public class OrderServiceImpl implements OrderService {
         log.info("调用updateStatus，用于替换微信支付更新数据库状态的问题");
         orderMapper.updateStatus(OrderStatus, OrderPaidStatus, check_out_time, orderNumber);
 
+        paySuccess(orderNumber);
         return vo;
     }
 
@@ -183,15 +191,26 @@ public class OrderServiceImpl implements OrderService {
         // 根据订单号查询当前用户的订单
         Orders ordersDB = orderMapper.getByNumberAndUserId(outTradeNo, userId);
 
-        // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
-        Orders orders = Orders.builder()
-                .id(ordersDB.getId())
-                .status(Orders.TO_BE_CONFIRMED)
-                .payStatus(Orders.PAID)
-                .checkoutTime(LocalDateTime.now())
-                .build();
 
-        orderMapper.update(orders);
+        //通过websocket向客户端浏览器推送消息——>type,orderId,content
+        //把这3个字段封装到一个map里面，然后把这个map转为json格式的
+        Map map = new HashMap();
+        map.put("type", 1);//消息类型，1表示来单提醒
+        map.put("orderId", ordersDB.getId());//订单id
+        map.put("content", "订单号：" + outTradeNo);//订单号
+        //通过WebSocket实现来单提醒，向客户端浏览器推送消息
+        String jsonString = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(jsonString);
+
+        // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
+//        Orders orders = Orders.builder()
+//                .id(ordersDB.getId())
+//                .status(Orders.TO_BE_CONFIRMED)
+//                .payStatus(Orders.PAID)
+//                .checkoutTime(LocalDateTime.now())
+//                .build();
+//
+//        orderMapper.update(orders);
     }
 
 
