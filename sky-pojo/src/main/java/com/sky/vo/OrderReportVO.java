@@ -11,7 +11,8 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderReportVO implements Serializable {
+public class OrderReportVO implements Serializable
+{
 
     //日期，以逗号分隔，例如：2022-10-01,2022-10-02,2022-10-03
     private String dateList;
@@ -25,10 +26,12 @@ public class OrderReportVO implements Serializable {
     //订单总数
     private Integer totalOrderCount;
 
-    //有效订单数
+    //有效订单总数
     private Integer validOrderCount;
 
     //订单完成率
     private Double orderCompletionRate;
 
 }
+
+
